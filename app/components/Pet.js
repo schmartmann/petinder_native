@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchMyPet, getPets } from '../actions/index';
+import { connect } from 'react-redux';
+import { StyleSheet, View, Text, Image, AppRegistry } from 'react-native';
 
-class Pet extends Component{
+class Pet extends Component {
   constructor(props){
     super(props);
     this.state = {
       truncateDesc: true
     }
-    let offset = this.props.pet.offset
+    let offset = this.props.pet.offset;
+    console.log(this.props);
     console.log("current offset: ", offset)
     this.props.fetchMyPet(offset);
-    this.untruncate = this.untruncate.bind(this);
-    this.truncate = this.truncate.bind(this);
+    // this.untruncate = this.untruncate.bind(this);
+    // this.truncate = this.truncate.bind(this);
   };
   truncate(){
     this.setState({truncateDesc: true})
@@ -38,28 +40,32 @@ class Pet extends Component{
     )
   };
   render(){
+    console.log(this.props)
     return(
-      <div className="pet-card">
+      <View className="pet-card">
         {/* {this.renderPhotos()} */}
-            <img src={this.props.pet.current_pet.photo[0]}></img>
-        <h3>
+          <Image
+            style={{width: 50, height: 50}}
+            source={{uri: this.props.pet.current_pet.photo[0]}}
+            />
+        <Text>
             {this.props.pet.current_pet.name}
-        </h3>
-        <h6>
+        </Text>
+        <Text>
           {this.props.pet.current_pet.city}, {this.props.pet.current_pet.state}
-        </h6>
-        <p id="pet-description" className={this.state.truncateDesc? "flow-text truncate" : "flow-text"} onClick={this.state.truncateDesc? this.untruncate : this.truncate}>
-          <i>
+        </Text>
+        <Text id="pet-description" className={this.state.truncateDesc? "flow-text truncate" : "flow-text"} onClick={this.state.truncateDesc? this.untruncate : this.truncate}>
             {this.props.pet.current_pet.description}
-          </i>
-        </p>
-        <p>
-          <a href={this.props.pet.current_pet.link}>View Profile</a>
-        </p>
-      </div>
+        </Text>
+        <Text>
+          View Profile
+          {/* <a href={this.props.pet.current_pet.link}>View Profile</a> */}
+        </Text>
+      </View>
     )
   }
 }
+
 
 function mapStateToProps(state){
   return {
@@ -73,3 +79,5 @@ function mapDispatchToProps(dispatch){
     getPets: getPets
   }, dispatch)
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pet);

@@ -28,7 +28,7 @@ const sortPhotos = function(arr){
 }
 
 
-export default function(state = INITIAL_STATE, action){
+export default function pet(state = INITIAL_STATE, action = {}){
   switch(action.type){
     case 'LOAD_PET':
       console.log("LOAD_PET firing: ", action.payload)

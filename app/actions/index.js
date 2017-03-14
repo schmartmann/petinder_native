@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 const ROOT_URL = "http://petinder_api.pet-tinder.com/"
 export const FETCH_MY_PET  = "FETCH_MY_PET";
@@ -46,9 +45,9 @@ export function savePet(props){
   }
 }
 
-export function fetchMyPetOptimistic(props){
-  console.log("fetchMyPetOptimistic:", props.data)
-  let pets_batch = props.data.second;
+export function fetchMyPetOptimistic(pets){
+  console.log("fetchMyPetOptimistic:", pets)
+  let pets_batch = pets.second;
   let current_pet = pets_batch.shift();
   let pet = {
     current_pet : current_pet,
@@ -62,25 +61,28 @@ export function fetchMyPetOptimistic(props){
 }
 
 export function fetchMyPet(offset){
-  let currentOffset = offset;
-  console.log("currentOffset in actions/index", currentOffset)
+  console.log("currentOffset in actions/index", offset)
   return function(dispatch){
-    const positionRequest = axios.get('http://ip-api.com/json').then(response => {
-      console.log(response)
-      let user_location;
-      if (response.data.country !== "United States"){
-        let user_location = `${response.data.city}, ${response.data.regionName}`
-        console.log(user_location)
-      } else {
-        user_location = response.data.zip
-      }
-      const url = `${ROOT_URL}api/v1/pets?location=${user_location}&offset=${currentOffset}`
-
-      axios.get(url).then(response => {
-          console.log("request from actions/index.js", response)
-          dispatch(fetchMyPetOptimistic(response))
-        });
+    return fetch('http://ip-api.com/json')
+    .then( response => response.json())
+    .then( response => {
+      console.log(response);
+      // let loc;
+      // if (response.country !== "United States"){
+      //   let loc = `${response.city}, ${response.region}`
+      // } else {
+      //   let loc = response.zip;
+      //   console.log(loc)
+      // }
+      const url = `${ROOT_URL}api/v1/pets?location=${response.zip}&offset=${offset}`
+      fetch(url)
+      .then( response => response.json())
+      .then( data => {
+        console.log(data);
+        dispatch(fetchMyPetOptimistic(data))
+      })
+      .catch(message => console.log(message))
     })
-    return null
+    .catch( message => console.log(message))
   }
 }
