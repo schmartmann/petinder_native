@@ -40,22 +40,21 @@ class Pet extends Component {
     )
   };
   render(){
-    console.log(this.props)
     return(
-      <View className="pet-card">
+      <View style={ styles.petCard }>
         {/* {this.renderPhotos()} */}
           <Image
             style={{width: 50, height: 50}}
             source={{uri: this.props.pet.current_pet.photo[0]}}
             />
-        <Text>
-            {this.props.pet.current_pet.name}
+        <Text style={ styles.petName }>
+            { this.props.pet.current_pet.name.toUpperCase() }
         </Text>
         <Text>
-          {this.props.pet.current_pet.city}, {this.props.pet.current_pet.state}
+          { this.props.pet.current_pet.city }, { this.props.pet.current_pet.state }
         </Text>
-        <Text id="pet-description" className={this.state.truncateDesc? "flow-text truncate" : "flow-text"} onClick={this.state.truncateDesc? this.untruncate : this.truncate}>
-            {this.props.pet.current_pet.description}
+        <Text>
+            { this.props.pet.current_pet.description }
         </Text>
         <Text>
           View Profile
@@ -65,6 +64,26 @@ class Pet extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  petCard: {
+    position: 'relative',
+    marginTop: 100,
+    marginLeft: '5%',
+    marginRight: '5%',
+    width: '90%',
+    height: '70%',
+    borderStyle: 'solid',
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    borderRadius: 15
+  },
+  petName: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold'
+  }
+})
 
 
 function mapStateToProps(state){
