@@ -2,61 +2,91 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { fetchMyPet, getPets } from '../actions/index';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Text, Image, AppRegistry } from 'react-native';
+import {
+  PanResponder,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  AppRegistry } from 'react-native';
+
+  const { width, height } = Dimensions.get('window');
+
+const getDirectionAndColor = ({ moveX, moveY, dx, dy }) => {
+  const draggedDown = dy > 30;
+  const draggedUp = dy < -30;
+  const draggedLeft = dx < -30;
+  const draggedRight = dx > 30;
+  const isRed = moveY < 90 && moveY > 40 && moveX > 0 && moveX < width;
+  const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
+  let dragDirection = '';
+
+  if (draggedDown || draggedUp) {
+    if (draggedDown) dragDirection += 'dragged down '
+    if (draggedUp) dragDirection +=  'dragged up ';
+  }
+
+  if (draggedLeft || draggedRight) {
+    if (draggedLeft) dragDirection += 'dragged left '
+    if (draggedRight) dragDirection +=  'dragged right ';
+  }
+
+  if (isRed) return `red ${dragDirection}`
+  if (isBlue) return `blue ${dragDirection}`
+  if (dragDirection) return dragDirection;
+}
 
 class Pet extends Component {
   constructor(props){
     super(props);
     this.state = {
-      truncateDesc: true
-    }
-    let offset = this.props.pet.offset;
-    console.log(this.props);
-    console.log("current offset: ", offset)
-    this.props.fetchMyPet(offset);
-    // this.untruncate = this.untruncate.bind(this);
-    // this.truncate = this.truncate.bind(this);
-  };
-  truncate(){
-    this.setState({truncateDesc: true})
-  };
-  untruncate(){
-    this.setState({truncateDesc: false})
-  };
-  renderPhotos(){
-    console.log("photos: ", this.props.pet.current_pet.photo)
-    let photoComponents = [];
-    for (let i = 0; i < this.props.pet.current_pet.photo.length; i ++){
-      photoComponents.push(
-        <a className="carousel-item" href="#one!">
-          <img src={this.props.pet.current_pet.photo[i]}></img>
-        </a>
-      )
+      truncateDesc: true,
+      zone: "Still touchable"
     };
-    return(
-      <div className="carousel">
-        {photoComponents}
-      </div>
-    )
+    this.onPress = this.onPress.bind(this);
   };
+  onPress() {
+    this.setState({
+      zone: "I gout touched with a parent pan responder -- and not by my priest. Better luck next time, Catholic church."
+    })
+  }
+  componentWillMount() {
+    this._panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => !!getDirectionAndColor(gestureState),
+      onPanResponderMove: (evt, gestureState) => {
+        const drag = getDirectionAndColor(gestureState);
+        this.setState({
+          zone: drag,
+        })
+      }
+    });
+  }
+  componentDidMount() {
+    let offset = this.props.pet.offset;
+    this.props.fetchMyPet(offset);
+  }
   render(){
     return(
-      <View style={ styles.petCard }>
-        {/* {this.renderPhotos()} */}
+      <View style={ styles.petCard } {...this._panResponder.panHandlers}>
+        <TouchableOpacity onPress={ this.onPress }>
+          <Text>{ this.state.zone }</Text>
+        </TouchableOpacity>
           <Image
-            style={{width: 50, height: 50}}
+            style={ styles.petImage }
             source={{uri: this.props.pet.current_pet.photo[0]}}
             />
         <Text style={ styles.petName }>
             { this.props.pet.current_pet.name.toUpperCase() }
         </Text>
-        <Text>
+        <Text style={ [styles.centerText, styles.zone1] }>
           { this.props.pet.current_pet.city }, { this.props.pet.current_pet.state }
         </Text>
-        <Text>
+        <Text style={ [styles.centerText, styles.zone2] }>
             { this.props.pet.current_pet.description }
         </Text>
-        <Text>
+        <Text style={ styles.centerText }>
           View Profile
           {/* <a href={this.props.pet.current_pet.link}>View Profile</a> */}
         </Text>
@@ -82,6 +112,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold'
+  },
+  petImage: {
+    width: '80%',
+    height: '60%',
+    left: '10%',
+    top: '5%'
+  },
+  centerText: {
+    textAlign: 'center',
+    marginTop: 10
+  },
+  zone1 : {
+    // backgroundColor: 'red'
+  },
+  zone2 : {
+    // backgroundColor: 'blue'
   }
 })
 
