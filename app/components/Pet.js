@@ -12,30 +12,14 @@ import {
   Dimensions,
   AppRegistry } from 'react-native';
 
-  const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const getDirectionAndColor = ({ moveX, moveY, dx, dy }) => {
-  const draggedDown = dy > 30;
-  const draggedUp = dy < -30;
+
+const dragDirection = ({ moveX, moveY, dx, dy}) => {
   const draggedLeft = dx < -30;
   const draggedRight = dx > 30;
-  const isRed = moveY < 90 && moveY > 40 && moveX > 0 && moveX < width;
-  const isBlue = moveY > (height - 50) && moveX > 0 && moveX < width;
   let dragDirection = '';
-
-  if (draggedDown || draggedUp) {
-    if (draggedDown) dragDirection += 'dragged down '
-    if (draggedUp) dragDirection +=  'dragged up ';
-  }
-
-  if (draggedLeft || draggedRight) {
-    if (draggedLeft) dragDirection += 'dragged left '
-    if (draggedRight) dragDirection +=  'dragged right ';
-  }
-
-  if (isRed) return `red ${dragDirection}`
-  if (isBlue) return `blue ${dragDirection}`
-  if (dragDirection) return dragDirection;
+  console.log(draggedLeft, draggedRight);
 }
 
 class Pet extends Component {
@@ -49,12 +33,12 @@ class Pet extends Component {
   };
   onPress() {
     this.setState({
-      zone: "I gout touched with a parent pan responder -- and not by my priest. Better luck next time, Catholic church."
+      zone: "I got touched with a parent pan responder -- and not by my priest. Better luck next time, Catholic church."
     })
   }
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => !!getDirectionAndColor(gestureState),
+      onMoveShouldSetPanResponder: (evt, gestureState) => !!dragDirection(gestureState),
       onPanResponderMove: (evt, gestureState) => {
         const drag = getDirectionAndColor(gestureState);
         this.setState({
@@ -71,7 +55,9 @@ class Pet extends Component {
     return(
       <View style={ styles.petCard } {...this._panResponder.panHandlers}>
         <TouchableOpacity onPress={ this.onPress }>
-          <Text>{ this.state.zone }</Text>
+          <Text>
+            { this.state.zone }
+          </Text>
         </TouchableOpacity>
           <Image
             style={ styles.petImage }
@@ -81,7 +67,7 @@ class Pet extends Component {
             { this.props.pet.current_pet.name.toUpperCase() }
         </Text>
         <Text style={ [styles.centerText, styles.zone1] }>
-          { this.props.pet.current_pet.city }, { this.props.pet.current_pet.state }
+          { `${this.props.pet.current_pet.city } ${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state }`}
         </Text>
         <Text style={ [styles.centerText, styles.zone2] }>
             { this.props.pet.current_pet.description }
