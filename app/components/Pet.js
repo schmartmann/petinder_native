@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import { fetchMyPet, getPets } from '../actions/index';
+import { fetchMyPet, getPets, nextPet } from '../actions/index';
 import { connect } from 'react-redux';
 import {
   PanResponder,
@@ -65,7 +65,13 @@ class Pet extends Component {
     position? position : 0;
     if ( (position >= rightWidth) || (position <= leftWidth) ){
       console.log("collision")
+      this.fetchNext();
     }
+  }
+  fetchNext() {
+    this.setState({
+      position: 0      
+    })
   }
   render(){
     return(
@@ -147,7 +153,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     fetchMyPet: fetchMyPet,
-    getPets: getPets
+    getPets: getPets,
+    nextPet: nextPet
   }, dispatch)
 }
 
