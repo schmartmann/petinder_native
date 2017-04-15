@@ -18,8 +18,13 @@ const { width, height } = Dimensions.get('window');
 const dragDirection = ({ moveX, moveY, dx, dy}) => {
   const draggedLeft = dx < -30;
   const draggedRight = dx > 30;
-  let dragDirection = '';
-  console.log(draggedLeft, draggedRight);
+  let dragDirection = 0;
+
+  if (draggedLeft || draggedRight) {
+    dragDirection = dx
+  };
+
+  if (dragDirection) return dragDirection;
 }
 
 class Pet extends Component {
@@ -27,22 +32,22 @@ class Pet extends Component {
     super(props);
     this.state = {
       truncateDesc: true,
-      zone: "Still touchable"
+      position: 0,
     };
     this.onPress = this.onPress.bind(this);
   };
   onPress() {
-    this.setState({
-      zone: "I got touched with a parent pan responder -- and not by my priest. Better luck next time, Catholic church."
-    })
+    //some kind of animation here on the pet card
+   console.log(this) 
   }
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => !!dragDirection(gestureState),
       onPanResponderMove: (evt, gestureState) => {
-        const drag = getDirectionAndColor(gestureState);
+        const drag = dragDirection(gestureState);
+        //drag returns the position change 
         this.setState({
-          zone: drag,
+          position: drag
         })
       }
     });
@@ -53,23 +58,18 @@ class Pet extends Component {
   }
   render(){
     return(
-      <View style={ styles.petCard } {...this._panResponder.panHandlers}>
-        <TouchableOpacity onPress={ this.onPress }>
-          <Text>
-            { this.state.zone }
-          </Text>
-        </TouchableOpacity>
-          <Image
-            style={ styles.petImage }
-            source={{uri: this.props.pet.current_pet.photo[0]}}
-            />
+      <View style={ [styles.petCard, {left: this.state.position}] } {...this._panResponder.panHandlers}>
+        <Image
+          style={ styles.petImage }
+          source={{uri: this.props.pet.current_pet.photo[0]}}
+          />
         <Text style={ styles.petName }>
             { this.props.pet.current_pet.name.toUpperCase() }
         </Text>
-        <Text style={ [styles.centerText, styles.zone1] }>
-          { `${this.props.pet.current_pet.city } ${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state }`}
+        <Text style={ styles.petLocation }>
+          { `${this.props.pet.current_pet.city.toUpperCase() } ${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
         </Text>
-        <Text style={ [styles.centerText, styles.zone2] }>
+        <Text style={ styles.centerText }>
             { this.props.pet.current_pet.description }
         </Text>
         <Text style={ styles.centerText }>
@@ -88,16 +88,29 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginRight: '5%',
     width: '90%',
-    height: '70%',
+    height: '75%',
     borderStyle: 'solid',
     borderColor: 'lightgrey',
     borderWidth: 1,
-    borderRadius: 15
+    borderRadius: 15 
   },
   petName: {
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold', 
+    position: 'relative', 
+    top: '-0.25%', 
+    left: '12%',
+    backgroundColor: 'transparent', 
+    color: "white", 
+  },
+  petLocation: {
+    position: 'relative', 
+    top: '-4%', 
+    right: '12%', 
+    textAlign: 'right',
+    backgroundColor: 'transparent', 
+    color: "white", 
   },
   petImage: {
     width: '80%',
@@ -109,12 +122,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10
   },
-  zone1 : {
-    // backgroundColor: 'red'
-  },
-  zone2 : {
-    // backgroundColor: 'blue'
-  }
 })
 
 
