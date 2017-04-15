@@ -38,7 +38,6 @@ class Pet extends Component {
   };
   onPress() {
     //some kind of animation here on the pet card
-   console.log(this) 
   }
   componentWillMount() {
     this._panResponder = PanResponder.create({
@@ -49,6 +48,7 @@ class Pet extends Component {
         this.setState({
           position: drag
         })
+        this.detectCollision(drag)
       }
     });
   }
@@ -56,9 +56,20 @@ class Pet extends Component {
     let offset = this.props.pet.offset;
     this.props.fetchMyPet(offset);
   }
+  calcRotate(pos) {
+    console.log(pos)
+  }
+  detectCollision(position) {
+    const rightWidth = (Dimensions.get('window').width)/2;
+    const leftWidth = 0 - rightWidth;  
+    position? position : 0;
+    if ( (position >= rightWidth) || (position <= leftWidth) ){
+      console.log("collision")
+    }
+  }
   render(){
     return(
-      <View style={ [styles.petCard, {left: this.state.position}] } {...this._panResponder.panHandlers}>
+      <View style={ [styles.petCard, {left: this.state.position}, {transform: this.calcRotate(this.state.position)}] } {...this._panResponder.panHandlers}>
         <Image
           style={ styles.petImage }
           source={{uri: this.props.pet.current_pet.photo[0]}}
@@ -67,7 +78,7 @@ class Pet extends Component {
             { this.props.pet.current_pet.name.toUpperCase() }
         </Text>
         <Text style={ styles.petLocation }>
-          { `${this.props.pet.current_pet.city.toUpperCase() } ${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
+          { `${this.props.pet.current_pet.city.toUpperCase() }${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
         </Text>
         <Text style={ styles.centerText }>
             { this.props.pet.current_pet.description }
@@ -92,7 +103,9 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: 'lightgrey',
     borderWidth: 1,
-    borderRadius: 15 
+    borderRadius: 15 ,
+    shadowColor: 'darkslategrey', 
+    // shadowOffset: {'width': 10, 'height': 100}
   },
   petName: {
     textAlign: 'left',
