@@ -63,7 +63,7 @@ class Pet extends Component {
     const rightWidth = (Dimensions.get('window').width)/2;
     const leftWidth = 0 - rightWidth;  
     position? position : 0;
-    if ( (position >= rightWidth) || (position <= leftWidth) ){
+    if ( (position >= (rightWidth/1.3)) || (position <= (leftWidth/1.3)) ){
       console.log("collision")
       this.fetchNext();
     }
