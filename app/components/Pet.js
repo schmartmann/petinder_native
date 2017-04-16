@@ -12,8 +12,9 @@ import {
   Dimensions,
   AppRegistry } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
+const { width } = Dimensions.get('window');
+const rightWidth = width/2;
+const leftWidth = 0 - rightWidth;  
 
 const dragDirection = ({ moveX, moveY, dx, dy}) => {
   const draggedLeft = dx < -30;
@@ -26,10 +27,6 @@ const dragDirection = ({ moveX, moveY, dx, dy}) => {
 
   if (dragDirection) return dragDirection;
 }
-
-
-const rightWidth = (Dimensions.get('window').width)/2;
-const leftWidth = 0 - rightWidth;  
 
 class Pet extends Component {
   constructor(props){
@@ -89,9 +86,6 @@ class Pet extends Component {
     var collision = this.detectCollision(position); 
     console.log(collision); 
     if (collision) {
-      this.setState({
-        position: 0
-      })
       this.fetchNext(); 
     } else {
       this.setState({
@@ -101,17 +95,18 @@ class Pet extends Component {
   }
   handleSwipe(position) { 
     var collision = this.detectCollision(position); 
-    if (collision) {
-      this.setState({
-        position: 0
-      });
-      this.fetchNext();
-    }
+    // if (collision) {
+    //   this.setState({
+    //     position: 0
+    //   });
+      // this.fetchNext();
+    // }
   }
   fetchNext() {
-   if (this.state.position === 0) {
-     this.props.nextPet(this.props.pet)
-   }
+    this.props.nextPet(this.props.pet)
+    this.setState({
+      position: 0
+    })
   }
   render(){
     return(
@@ -126,7 +121,11 @@ class Pet extends Component {
         <Text style={ styles.petLocation }>
           { `${this.props.pet.current_pet.city.toUpperCase() }${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
         </Text>
-        <Text style={ styles.centerText }>
+        <Text 
+          style={ [styles.centerText, styles.description]} 
+          numberOfLines={4} 
+          ellipsizeMode="tail"
+        >
             { this.props.pet.current_pet.description }
         </Text>
         <Text style={ styles.centerText }>
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginRight: '5%',
     width: '90%',
-    height: '75%',
+    height: '80%',
     borderStyle: 'solid',
     borderColor: 'lightgrey',
     borderWidth: 1,
@@ -184,6 +183,12 @@ const styles = StyleSheet.create({
     borderRadius: 8, 
     borderColor: 'black',
     borderWidth: 1,
+  },
+  description: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center", 
+    alignItems: "center"
   },
   centerText: {
     textAlign: 'center',
