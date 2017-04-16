@@ -69,7 +69,7 @@ class Pet extends Component {
     if (pos) {
       return (
         [
-          {rotate: `${pos/10}deg`}, 
+          {rotate: `${pos/6}deg`}, 
           // {scale: 1 + (pos < 1? pos = (pos * -1)/200 : pos/200)}
         ]
       )

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Icon from 'react-native-vector-icons/Foundation';
 import {
   Text,
   View,
@@ -10,6 +11,8 @@ export default class Icons extends Component {
   render() {
     return(
       <View style={ styles.iconBar }>
+        <Icon name="guide-dog" color="green"/>
+        <Icon name="no-dogs" color="red"/>
       </View>
     )
   }
