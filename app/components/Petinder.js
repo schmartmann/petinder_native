@@ -13,7 +13,10 @@ import Icons from './Icons';
 class Petinder extends Component {
   constructor() {
     super(); 
-    this.state = { display: true}
+    this.state = { 
+      display: true,
+      swipePosition: 0
+    }
   }
   componentDidMount() { 
     this.checkRender(this.props.pet.pet_batch);
@@ -33,12 +36,20 @@ class Petinder extends Component {
       })
     }
   }
+  updateSwipePosition(position){
+    this.setState({
+      swipePosition: position
+    })
+  }
   render() {
     return (
       <View style={{flex: 1}}>
         <Navbar/>
-        <Pet style={{display: this.state.display? '' : 'hidden'}}/>
-        <Icons/>
+        <Pet 
+          style={{display: this.state.display? '' : 'hidden'}}
+          updateSwipePosition={this.updateSwipePosition.bind(this)}
+        />
+        <Icons swipe={this.state.swipePosition}/>
       </View>
     );
   }

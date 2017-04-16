@@ -49,10 +49,11 @@ class Pet extends Component {
         //drag returns the position change 
         this.setState({
           position: drag
-        })
+        });
+        this.props.updateSwipePosition(drag);
       }, 
       onPanResponderRelease: (evt, gestureState) => {
-        this.handleRelease(this.state.position)
+        this.handleRelease(this.state.position);
       }
     });
   }
@@ -89,18 +90,20 @@ class Pet extends Component {
   }
   handleRelease(position) {
     var collision = this.detectCollision(position); 
-    console.log(collision); 
     if (collision) {
       if (this.state.position > 0) {
         this.likePet(); 
         this.fetchNext(); 
+        this.props.updateSwipePosition(0)
       } else {
         this.fetchNext(); 
+        this.props.updateSwipePosition(0)
       }
     } else {
       this.setState({
         position: 0
       })
+      this.props.updateSwipePosition(0)
     }
   }
   fetchNext() {
