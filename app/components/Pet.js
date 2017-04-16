@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
+  ScrollView,
   TouchableHighlight,
   Image,
   Dimensions,
@@ -131,7 +131,7 @@ class Pet extends Component {
           View Profile
           {/* <a href={this.props.pet.current_pet.link}>View Profile</a> */}
         </Text>
-        <View style={{marginTop: 22}}>
+        <View style={{flex: 1}}>
           <Modal
             animationType={"slide"}
             transparent={false}
@@ -145,11 +145,11 @@ class Pet extends Component {
                 </Text>
                 <TouchableHighlight onPress={ () => {
                   this.setModalVisible(!this.state.modalVisible)}}>
-                  <View style={ styles.button_view}>
+                  <ScrollView style={ styles.button_view}>
                     <Text style={ styles.button_text}>
                       Back
                     </Text>
-                  </View>
+                  </ScrollView>
                 </TouchableHighlight>
               </View>
             </View>
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     marginLeft: "20%",
   },
   button_view: {
-    borderRadius: 18
+    borderRadius: 18,
   },
 })
 
