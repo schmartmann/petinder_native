@@ -9,9 +9,11 @@ import {
   Text,
   ScrollView,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   Dimensions,
   Modal,
+  Linking, 
   AppRegistry } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -37,11 +39,8 @@ class Pet extends Component {
       position: 0,
       modalVisible: false
     };
-    this.onPress = this.onPress.bind(this);
+    this.handleLink = this.handleLink.bind(this);
   };
-  onPress() {
-    //some kind of animation here on the pet card
-  }
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => !!dragDirection(gestureState),
@@ -92,7 +91,12 @@ class Pet extends Component {
     var collision = this.detectCollision(position); 
     console.log(collision); 
     if (collision) {
-      this.fetchNext(); 
+      if (this.state.position > 0) {
+        this.likePet(); 
+        this.fetchNext(); 
+      } else {
+        this.fetchNext(); 
+      }
     } else {
       this.setState({
         position: 0
@@ -103,6 +107,25 @@ class Pet extends Component {
     this.props.nextPet(this.props.pet)
     this.setState({
       position: 0
+    })
+  }
+  handleLink() {
+   Linking.canOpenURL(this.props.pet.current_pet.link).then(supported => {
+     if (supported) {
+       Linking.openURL(this.props.pet.current_pet.link);
+     } else {
+       console.log('Don\'t know how to open URI: ' + this.props.pet.current_pet.link);
+     }
+   });
+  }
+  likePet() {
+    const url = `https://www.petfinder.com/adoption-inquiry/${this.props.pet.current_pet.pet_id}`
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+       console.log('Don\'t know how to open URI: ' + url);
+      }
     })
   }
   render(){
@@ -127,10 +150,12 @@ class Pet extends Component {
             { this.props.pet.current_pet.description }
             </Text>
           </TouchableHighlight>
-        <Text style={ styles.centerText }>
-          View Profile
-          {/* <a href={this.props.pet.current_pet.link}>View Profile</a> */}
-        </Text>
+        <TouchableOpacity
+          onPress={this.handleLink}>
+          <Text style={ [styles.centerText] }>
+            View Petfinder Profile
+          </Text>
+        </TouchableOpacity>
         <View style={{flex: 1}}>
           <Modal
             animationType={"slide"}
