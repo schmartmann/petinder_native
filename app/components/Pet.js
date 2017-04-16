@@ -8,8 +8,10 @@ import {
   View,
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   Image,
   Dimensions,
+  Modal,
   AppRegistry } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -32,8 +34,8 @@ class Pet extends Component {
   constructor(props){
     super(props);
     this.state = {
-      truncateDesc: true,
       position: 0,
+      modalVisible: false
     };
     this.onPress = this.onPress.bind(this);
   };
@@ -58,6 +60,11 @@ class Pet extends Component {
   componentDidMount() {
     let offset = this.props.pet.offset;
     this.props.fetchMyPet(offset);
+  }
+  setModalVisible(visible) { 
+    this.setState({
+      modalVisible: visible
+    })
   }
   handleTransform(pos) {
     if (pos) {
@@ -111,24 +118,46 @@ class Pet extends Component {
         <Text style={ styles.petLocation }>
           { `${this.props.pet.current_pet.city.toUpperCase() }${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
         </Text>
-        <Text 
-          style={ [styles.centerText, styles.description]} 
-          numberOfLines={4} 
-          ellipsizeMode="tail"
-        >
+          <TouchableHighlight onPress={ () => { this.setModalVisible(true)} }>
+            <Text 
+              style={ [styles.centerText, styles.description]} 
+              numberOfLines={4} 
+              ellipsizeMode="tail"
+            >
             { this.props.pet.current_pet.description }
-        </Text>
+            </Text>
+          </TouchableHighlight>
         <Text style={ styles.centerText }>
           View Profile
           {/* <a href={this.props.pet.current_pet.link}>View Profile</a> */}
         </Text>
+        <View style={{marginTop: 22}}>
+          <Modal
+            animationType={"slide"}
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {alert("Modal closed")}}>
+            <View style={{marginTop: 22}}>
+              <View> 
+                <Text>{ this.props.pet.current_pet.name }'s Profile:</Text>
+                <Text>
+                  { this.props.pet.current_pet.description }
+                </Text>
+                <TouchableHighlight onPress={ () => {
+                  this.setModalVisible(!this.state.modalVisible)}}>
+                  <Text>Back</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  petCard: {
+   petCard: {
     position: 'relative',
     marginTop: 100,
     marginLeft: '5%',
