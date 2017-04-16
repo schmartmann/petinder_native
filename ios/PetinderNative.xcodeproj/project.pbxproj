@@ -500,7 +500,8 @@
 			children = (
 			);
 			name = Resources;
-			sourceTree = "<group>";
+			path = Fonts;
+			sourceTree = SOURCE_ROOT;
 		};
 		44BF84731EA32B960013FD00 /* Products */ = {
 			isa = PBXGroup;
