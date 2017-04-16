@@ -64,24 +64,20 @@ export function fetchMyPetOptimistic(pets){
 }
 
 export function fetchMyPet(offset){
-  // console.log("currentOffset in actions/index", offset)
   return function(dispatch){
     return fetch('http://ip-api.com/json')
     .then( response => response.json())
     .then( response => {
-      // console.log(response);
-      // let loc;
-      // if (response.country !== "United States"){
-      //   let loc = `${response.city}, ${response.region}`
-      // } else {
-      //   let loc = response.zip;
-      //   console.log(loc)
-      // }
-      const url = `${ROOT_URL}api/v1/pets?location=${response.zip}&offset=${offset}`
+      let loc = '';
+      if (response.country !== "United States"){
+        loc = `${response.city}, ${response.region}`;
+      } else {
+        loc = response.zip;
+      };
+      const url = `${ROOT_URL}api/v1/pets?location=${loc}&offset=${offset}`
       fetch(url)
       .then( response => response.json())
       .then( data => {
-        // console.log(data);
         dispatch(fetchMyPetOptimistic(data))
       })
       .catch(message => console.log(message))
