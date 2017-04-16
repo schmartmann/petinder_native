@@ -57,21 +57,24 @@ class Pet extends Component {
     this.props.fetchMyPet(offset);
   }
   calcRotate(pos) {
-    console.log(pos)
+    // console.log(pos)
   }
   detectCollision(position) {
     const rightWidth = (Dimensions.get('window').width)/2;
     const leftWidth = 0 - rightWidth;  
     position? position : 0;
     if ( (position >= (rightWidth/1.3)) || (position <= (leftWidth/1.3)) ){
-      console.log("collision")
+      this.setState({
+        position: 0
+      });
       this.fetchNext();
     }
   }
+
   fetchNext() {
-    this.setState({
-      position: 0      
-    })
+   if (this.state.position === 0) {
+     this.props.nextPet(this.props.pet)
+   }
   }
   render(){
     return(

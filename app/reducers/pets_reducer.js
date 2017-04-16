@@ -16,14 +16,14 @@ const INITIAL_STATE = {
 
 
 const sortPhotos = function(arr){
-  console.log("sortPhotos: ", arr);
+  // console.log("sortPhotos: ", arr);
   let photos = [];
   for (let index of arr){
     if (index["@size"] === "x"){
       photos.push(index["$t"])
     }
   }
-  console.log("sorted photos:", photos)
+  // console.log("sorted photos:", photos)
   return photos;
 }
 
@@ -31,7 +31,7 @@ const sortPhotos = function(arr){
 export default function pet(state = INITIAL_STATE, action = {}){
   switch(action.type){
     case 'LOAD_PET':
-      console.log("LOAD_PET firing: ", action.payload)
+      // console.log("LOAD_PET firing: ", action.payload)
       let current_pet = action.payload.current_pet;
       let pet_batch = action.payload.pet_batch;
       let new_current_pet_photos = sortPhotos(current_pet.photo);
@@ -70,10 +70,10 @@ export default function pet(state = INITIAL_STATE, action = {}){
         offset: state.offset
       };
     case 'SAVE_PET':
-      console.log("SAVE_PET firing: ", action.payload);
+      // console.log("SAVE_PET firing: ", action.payload);
       new_current_pet = action.payload.nextPet;
       new_pet_batch = action.payload.petsBatch;
-      console.log("new current_pet: ", new_current_pet.photo)
+      // console.log("new current_pet: ", new_current_pet.photo)
       new_current_pet_photos = sortPhotos(new_current_pet.photo);
       return {
         current_pet: {
@@ -90,7 +90,7 @@ export default function pet(state = INITIAL_STATE, action = {}){
         offset: state.offset
       }
     default:
-      console.log("no pet loaded");
+      // console.log("no pet loaded");
       return state;
   }
 }
