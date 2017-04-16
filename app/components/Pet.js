@@ -145,7 +145,11 @@ class Pet extends Component {
                 </Text>
                 <TouchableHighlight onPress={ () => {
                   this.setModalVisible(!this.state.modalVisible)}}>
-                  <Text>Back</Text>
+                  <View style={ styles.button_view}>
+                    <Text style={ styles.button_text}>
+                      Back
+                    </Text>
+                  </View>
                 </TouchableHighlight>
               </View>
             </View>
@@ -213,6 +217,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     backgroundColor: "transparent", 
+  },
+  button_text: {
+    backgroundColor: "black", 
+    color: "white", 
+    fontSize: 18,
+    width: '50%',
+    textAlign: "center",
+    marginTop: "10%", 
+    marginLeft: "20%",
+  },
+  button_view: {
+    borderRadius: 18
   },
 })
 
