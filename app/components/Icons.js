@@ -8,11 +8,17 @@ import {
 } from 'react-native';
 
 export default class Icons extends Component {
+  constructor(){
+    super();
+    this.state = {
+      iconSize: 30
+    };
+  }
   render() {
     return(
       <View style={ styles.iconBar }>
-        <Icon name="guide-dog" color="green"/>
-        <Icon name="no-dogs" color="red"/>
+        <Icon name="guide-dog" size={90} color="green"/>
+        <Icon name="no-dogs" size={90} color="red"/>
       </View>
     )
   }
@@ -20,15 +26,9 @@ export default class Icons extends Component {
 
 const styles = StyleSheet.create({
   iconBar: {
-    height: 5,
-    width: 100,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around', 
+    backgroundColor: 'transparent', 
   },
-  icon: {
-    top: 30,
-    left: 100,
-    right: 100,
-    bottom: 0,
-    height: 55,
-    width: 200,
-  }
 })

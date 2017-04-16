@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginRight: '5%',
     width: '90%',
-    height: '75%',
+    height: '70%',
     borderStyle: 'solid',
     borderColor: 'lightgrey',
     borderWidth: 1,

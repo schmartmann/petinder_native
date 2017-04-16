@@ -35,7 +35,7 @@ class Petinder extends Component {
   }
   render() {
     return (
-      <View>
+      <View style={{flex: 1}}>
         <Navbar/>
         <Pet style={{display: this.state.display? '' : 'hidden'}}/>
         <Icons/>
