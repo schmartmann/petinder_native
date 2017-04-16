@@ -57,7 +57,12 @@ class Pet extends Component {
     this.props.fetchMyPet(offset);
   }
   calcRotate(pos) {
-    // console.log(pos)
+    console.log(pos);
+    if (pos) {
+      return ([{rotate:`${pos/10}deg`}])
+    } else {
+      return ([{rotate: "0deg"}])
+    }
   }
   detectCollision(position) {
     const rightWidth = (Dimensions.get('window').width)/2;
@@ -70,7 +75,6 @@ class Pet extends Component {
       this.fetchNext();
     }
   }
-
   fetchNext() {
    if (this.state.position === 0) {
      this.props.nextPet(this.props.pet)
