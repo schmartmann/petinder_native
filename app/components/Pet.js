@@ -45,15 +45,19 @@ class Pet extends Component {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => !!dragDirection(gestureState),
       onPanResponderMove: (evt, gestureState) => {
-        const drag = dragDirection(gestureState);
-        //drag returns the position change 
-        this.setState({
-          position: drag
-        });
-        this.props.updateSwipePosition(drag);
+        if (!this.state.modalVisible){
+          const drag = dragDirection(gestureState);
+          //drag returns the position change 
+          this.setState({
+            position: drag
+          });
+          this.props.updateSwipePosition(drag);
+        }
       }, 
       onPanResponderRelease: (evt, gestureState) => {
-        this.handleRelease(this.state.position);
+        if (!this.state.modalVisible){
+          this.handleRelease(this.state.position);
+        }
       }
     });
   }
@@ -166,20 +170,20 @@ class Pet extends Component {
             visible={this.state.modalVisible}
             onRequestClose={() => {alert("Modal closed")}}>
             <View style={{marginTop: 22}}>
-              <View> 
+              <ScrollView style={ styles.button_view}> 
                 <Text style={ styles.modalText }>{ this.props.pet.current_pet.name }'s Profile:</Text>
                 <Text style={ [styles.modalBorder, styles.modalText] }>
                   { this.props.pet.current_pet.description }
                 </Text>
                 <TouchableHighlight onPress={ () => {
                   this.setModalVisible(!this.state.modalVisible)}}>
-                  <ScrollView style={ styles.button_view}>
+                  <View>
                     <Text style={ styles.button_text}>
                       Back
                     </Text>
-                  </ScrollView>
+                  </View>
                 </TouchableHighlight>
-              </View>
+              </ScrollView>
             </View>
           </Modal>
         </View>
