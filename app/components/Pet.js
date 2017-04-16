@@ -49,7 +49,6 @@ class Pet extends Component {
         this.setState({
           position: drag
         })
-        this.handleSwipe(drag)
       }, 
       onPanResponderRelease: (evt, gestureState) => {
         this.handleRelease(this.state.position)
@@ -92,15 +91,6 @@ class Pet extends Component {
         position: 0
       })
     }
-  }
-  handleSwipe(position) { 
-    var collision = this.detectCollision(position); 
-    // if (collision) {
-    //   this.setState({
-    //     position: 0
-    //   });
-      // this.fetchNext();
-    // }
   }
   fetchNext() {
     this.props.nextPet(this.props.pet)
@@ -185,10 +175,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   description: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center", 
-    alignItems: "center"
+    fontSize: 12,
+    width: "80%", 
+    textAlign: 'left',
+    marginLeft: '10%'
   },
   centerText: {
     textAlign: 'center',
@@ -196,7 +186,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent", 
   },
 })
-
 
 function mapStateToProps(state){
   return {
