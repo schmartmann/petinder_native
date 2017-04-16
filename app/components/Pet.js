@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginRight: '5%',
     width: '90%',
-    height: '80%',
+    height: '75%',
     borderStyle: 'solid',
     borderColor: 'lightgrey',
     borderWidth: 1,
@@ -192,7 +192,8 @@ const styles = StyleSheet.create({
   },
   centerText: {
     textAlign: 'center',
-    marginTop: 10
+    marginTop: 10,
+    backgroundColor: "transparent", 
   },
 })
 
