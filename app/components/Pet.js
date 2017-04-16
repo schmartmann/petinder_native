@@ -142,10 +142,10 @@ class Pet extends Component {
           style={ styles.petImage }
           source={{uri: this.props.pet.current_pet.photo[0]}}
           />
-        <Text style={ styles.petName }>
+        <Text style={ styles.petName } adjustsFontSizeToFit={true}>
             { this.props.pet.current_pet.name.toUpperCase() }
         </Text>
-        <Text style={ styles.petLocation }>
+        <Text style={ styles.petLocation } adjustsFontSizeToFit={true}>
           { `${this.props.pet.current_pet.city.toUpperCase() }${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
         </Text>
           <TouchableHighlight onPress={ () => { this.setModalVisible(true)} }>
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold', 
     position: 'relative', 
-    top: '-0.25%', 
+    // top: '-0.25%', 
     left: '12%',
     backgroundColor: 'transparent',
     color: "white", 
@@ -222,13 +222,14 @@ const styles = StyleSheet.create({
   },
   petLocation: {
     position: 'relative', 
-    top: '-4%', 
+    top: '-3%', 
     right: '12%', 
     textAlign: 'right',
     backgroundColor: 'transparent', 
     color: "white", 
     textShadowColor: "darkslategrey", 
-    textShadowOffset: {'width': 2, 'height': 2}
+    textShadowOffset: {'width': 2, 'height': 2},
+    fontSize: 20,
   },
   petImage: {
     width: '80%',
