@@ -27,6 +27,10 @@ const dragDirection = ({ moveX, moveY, dx, dy}) => {
   if (dragDirection) return dragDirection;
 }
 
+
+const rightWidth = (Dimensions.get('window').width)/2;
+const leftWidth = 0 - rightWidth;  
+
 class Pet extends Component {
   constructor(props){
     super(props);
@@ -48,7 +52,10 @@ class Pet extends Component {
         this.setState({
           position: drag
         })
-        this.detectCollision(drag)
+        this.handleSwipe(drag)
+      }, 
+      onPanResponderRelease: (evt, gestureState) => {
+        this.handleRelease(this.state.position)
       }
     });
   }
@@ -56,19 +63,45 @@ class Pet extends Component {
     let offset = this.props.pet.offset;
     this.props.fetchMyPet(offset);
   }
-  calcRotate(pos) {
-    console.log(pos);
+  handleTransform(pos) {
     if (pos) {
-      return ([{rotate:`${pos/10}deg`}])
+      return (
+        [
+          {rotate: `${pos/10}deg`}, 
+          // {scale: 1 + (pos < 1? pos = (pos * -1)/200 : pos/200)}
+        ]
+      )
     } else {
       return ([{rotate: "0deg"}])
     }
   }
   detectCollision(position) {
-    const rightWidth = (Dimensions.get('window').width)/2;
-    const leftWidth = 0 - rightWidth;  
     position? position : 0;
-    if ( (position >= (rightWidth/1.3)) || (position <= (leftWidth/1.3)) ){
+    var collision;
+    if ( (position >= (rightWidth/1.2)) || (position <= (leftWidth/1.2)) ){
+      collision = true
+    } else {
+      collision = false
+    }
+    return collision
+  }
+  handleRelease(position) {
+    var collision = this.detectCollision(position); 
+    console.log(collision); 
+    if (collision) {
+      this.setState({
+        position: 0
+      })
+      this.fetchNext(); 
+    } else {
+      this.setState({
+        position: 0
+      })
+    }
+  }
+  handleSwipe(position) { 
+    var collision = this.detectCollision(position); 
+    if (collision) {
       this.setState({
         position: 0
       });
@@ -82,7 +115,7 @@ class Pet extends Component {
   }
   render(){
     return(
-      <View style={ [styles.petCard, {left: this.state.position}, {transform: this.calcRotate(this.state.position)}] } {...this._panResponder.panHandlers}>
+      <View style={ [styles.petCard, {left: this.state.position}, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
         <Image
           style={ styles.petImage }
           source={{uri: this.props.pet.current_pet.photo[0]}}
@@ -118,7 +151,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15 ,
     shadowColor: 'darkslategrey', 
-    // shadowOffset: {'width': 10, 'height': 100}
+    shadowOpacity: 1,
+    shadowOffset: {'width': 2, 'height': 2}
   },
   petName: {
     textAlign: 'left',
@@ -127,8 +161,10 @@ const styles = StyleSheet.create({
     position: 'relative', 
     top: '-0.25%', 
     left: '12%',
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
     color: "white", 
+    textShadowColor: "darkslategrey", 
+    textShadowOffset: {'width': 2, 'height': 2}
   },
   petLocation: {
     position: 'relative', 
@@ -137,12 +173,17 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     backgroundColor: 'transparent', 
     color: "white", 
+    shadowColor: 'darkslategrey', 
+    shadowOffset: {'width': 10, 'height': 100}
   },
   petImage: {
     width: '80%',
     height: '60%',
     left: '10%',
-    top: '5%'
+    top: '5%', 
+    borderRadius: 8, 
+    borderColor: 'black',
+    borderWidth: 1,
   },
   centerText: {
     textAlign: 'center',
