@@ -152,7 +152,7 @@ class Pet extends Component {
           </TouchableHighlight>
         <TouchableOpacity
           onPress={this.handleLink}>
-          <Text style={ [styles.centerText] }>
+          <Text style={ [styles.profileButton] }>
             View Petfinder Profile
           </Text>
         </TouchableOpacity>
@@ -220,8 +220,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     backgroundColor: 'transparent', 
     color: "white", 
-    shadowColor: 'darkslategrey', 
-    shadowOffset: {'width': 10, 'height': 100}
+    textShadowColor: "darkslategrey", 
+    textShadowOffset: {'width': 2, 'height': 2}
   },
   petImage: {
     width: '80%',
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     width: "80%", 
     textAlign: 'left',
-    marginLeft: '10%'
+    marginLeft: '10%',
   },
   centerText: {
     textAlign: 'center',
@@ -268,6 +268,10 @@ const styles = StyleSheet.create({
   button_view: {
     borderRadius: 18,
   },
+  profileButton: {
+    marginTop: "15%", 
+    textAlign: "center",
+  }
 })
 
 function mapStateToProps(state){
