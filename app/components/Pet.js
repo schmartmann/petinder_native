@@ -121,7 +121,7 @@ class Pet extends Component {
           <TouchableHighlight onPress={ () => { this.setModalVisible(true)} }>
             <Text 
               style={ [styles.centerText, styles.description]} 
-              numberOfLines={4} 
+              numberOfLines={3} 
               ellipsizeMode="tail"
             >
             { this.props.pet.current_pet.description }
@@ -139,8 +139,8 @@ class Pet extends Component {
             onRequestClose={() => {alert("Modal closed")}}>
             <View style={{marginTop: 22}}>
               <View> 
-                <Text>{ this.props.pet.current_pet.name }'s Profile:</Text>
-                <Text>
+                <Text style={ styles.modalText }>{ this.props.pet.current_pet.name }'s Profile:</Text>
+                <Text style={ [styles.modalBorder, styles.modalText] }>
                   { this.props.pet.current_pet.description }
                 </Text>
                 <TouchableHighlight onPress={ () => {
@@ -217,6 +217,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     backgroundColor: "transparent", 
+  },
+  modalBorder: {
+    borderRadius: 8, 
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 2,
+  },
+  modalText: {
+    textAlign: "left",
+    padding: 16,
+    width: "90%", 
+    marginLeft: "5%",
+    fontSize: 22,
   },
   button_text: {
     backgroundColor: "black", 
