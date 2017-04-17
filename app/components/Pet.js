@@ -16,17 +16,25 @@ import {
   Linking, 
   AppRegistry } from 'react-native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const rightWidth = width/2;
 const leftWidth = 0 - rightWidth;  
+const bottom = height;  
 
 const dragDirection = ({ moveX, moveY, dx, dy}) => {
-  const draggedLeft = dx < -30;
-  const draggedRight = dx > 30;
+  const draggedLeft = dx < -10;
+  const draggedRight = dx > 10;
+  const draggedUp = dy <-10;
+  const draggedDown = dy > 10; 
+
   let dragDirection = 0;
+
+  console.log(dy) 
 
   if (draggedLeft || draggedRight) {
     dragDirection = dx
+  } else if (draggedUp || draggedDown){
+    dragDirection = dy
   };
 
   if (dragDirection) return dragDirection;

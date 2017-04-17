@@ -61,11 +61,14 @@ class Icons extends Component {
         <TouchableOpacity 
           onPress={this.fetchNext}
         >
-          <Icon name="no-dogs" size={90} color="red" style={{transform: this.handleTransformLeft(this.props.swipe)}}/>
+          <Icon name="no-dogs" size={90} color="red" style={[styles.iconItem, {transform: this.handleTransformLeft(this.props.swipe)}]}/>
         </TouchableOpacity>
+        <TouchableOpacity>
+          <Icon name="refresh" size={45} color="blue" style={styles.iconItem}/>
+       </TouchableOpacity>
         <TouchableOpacity
           onPress={this.likePet}>
-          <Icon name="guide-dog" size={90} color="green" style={{transform: this.handleTransformRight(this.props.swipe)}}/>
+          <Icon name="guide-dog" size={90} color="green" style={[styles.iconItem, {transform: this.handleTransformRight(this.props.swipe)}]}/>
         </TouchableOpacity>
       </View>
     )
@@ -75,9 +78,14 @@ const styles = StyleSheet.create({
   iconBar: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around', 
+    justifyContent: 'center', 
     backgroundColor: 'transparent', 
+    alignItems: 'center',
   },
+  iconItem: {
+    paddingLeft: '5%',
+    paddingRight: '5%',
+  }
 })
 
 function mapStateToProps(state){
