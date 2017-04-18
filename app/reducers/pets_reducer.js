@@ -11,7 +11,8 @@ const INITIAL_STATE = {
         animal: ''
       },
     pet_batch: [],
-    offset: 0
+    offset: 0, 
+    fetching: true,
 }
 
 
@@ -47,7 +48,8 @@ export default function pet(state = INITIAL_STATE, action = {}){
           link: current_pet.link
         },
         pet_batch: pet_batch,
-        offset: state.offset + 25
+        offset: state.offset + 25, 
+        fetching: false, 
       };
     case 'NEXT_PET':
       console.log("NEXT_PET firing: ", action.payload);
@@ -67,7 +69,8 @@ export default function pet(state = INITIAL_STATE, action = {}){
           link: new_current_pet.link
         },
         pet_batch: new_pet_batch,
-        offset: state.offset
+        offset: state.offset, 
+        fetching: false,
       };
     case 'SAVE_PET':
       // console.log("SAVE_PET firing: ", action.payload);
@@ -87,7 +90,13 @@ export default function pet(state = INITIAL_STATE, action = {}){
           link: new_current_pet.link
         },
         pet_batch: new_pet_batch,
-        offset: state.offset
+        offset: state.offset,
+        fetching: false, 
+      }
+    case "FETCHING":
+      return {
+        ...state, 
+        fetching: true
       }
     default:
       // console.log("no pet loaded");

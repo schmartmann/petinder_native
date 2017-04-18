@@ -4,6 +4,14 @@ export const FETCH_MY_PET  = "FETCH_MY_PET";
 export const LOAD_PET = "LOAD_PET";
 export const NEXT_PET = "NEXT_PET";
 export const SAVE_PET = "SAVE_PET";
+export const FETCHING = "FETCHING"; 
+
+export function fetching(){
+  console.log("fetching");
+  return {
+   type: FETCHING
+  }
+}
 
 export function nextPetOptimistic(props){
   let nextPet = props.pet_batch.shift();
@@ -65,6 +73,7 @@ export function fetchMyPetOptimistic(pets){
 
 export function fetchMyPet(offset){
   return function(dispatch){
+    dispatch(fetching());
     return fetch('http://ip-api.com/json')
     .then( response => response.json())
     .then( response => {

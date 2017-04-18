@@ -9,31 +9,34 @@ import {
 import Navbar from './Navbar';
 import Pet from './Pet';
 import Icons from './Icons';
+import Loader from './Loader'; 
 
 class Petinder extends Component {
   constructor() {
     super(); 
     this.state = { 
-      display: true,
+      fetching: true,
       swipePosition:{direction:'', change:0} 
     }
   }
   componentDidMount() { 
-    this.checkRender(this.props.pet.pet_batch);
+    this.checkRender(this.props.pet.fetching);
   }
   componentWillReceiveProps(nextProps) {
-    this.checkRender(nextProps.pet.pet_batch); 
+    this.checkRender(nextProps.pet.fetching); 
   }
-  checkRender(pets_batch) {
-    if (pets_batch.length < 1) {
-      console.log("hide component")
-      this.setState({
-        display: false
-      })
+  checkRender(fetching) {
+    console.log("check render method", fetching);
+    if (fetching) {
+      return(
+        <Loader/>
+      )
     } else {
-      this.setState({
-        display: true
-      })
+      return(
+        <Pet 
+          updateSwipePosition={this.updateSwipePosition.bind(this)}
+        />
+      )
     }
   }
   updateSwipePosition(position){
@@ -45,10 +48,7 @@ class Petinder extends Component {
     return (
       <View style={{flex: 1}}>
         <Navbar/>
-        <Pet 
-          style={{display: this.state.display? '' : 'hidden'}}
-          updateSwipePosition={this.updateSwipePosition.bind(this)}
-        />
+        { this.checkRender() }
         <Icons swipe={this.state.swipePosition}/>
       </View>
     );
