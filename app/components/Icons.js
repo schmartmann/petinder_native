@@ -20,10 +20,10 @@ class Icons extends Component {
   }
   handleTransformLeft(swipe){
     console.log(swipe); 
-    if (swipe && swipe < 0) {
+    if (swipe && swipe.direction === "lat"  && swipe.change < 0) {
       return (
         [
-          {scale: 1 + (swipe < 1? swipe = (swipe * -1)/200 : swipe/200)}
+          {scale: 1 + (swipe.change < 1? swipe.change = (swipe.change * -1)/200 : swipe.change/200)}
         ]
       )
     } else {
@@ -31,20 +31,32 @@ class Icons extends Component {
     }
   }
   handleTransformRight(swipe){
-    if (swipe && swipe > 0) {
+    if (swipe && swipe.direction === "lat" && swipe.change > 0) {
       return (
         [
-          {scale: 1 + (swipe < 1? swipe = (swipe * -1)/200 : swipe/200)}
+          {scale: 1 + (swipe.change < 1? swipe.change = (swipe.change * -1)/200 : swipe.change/200)}
         ]
       )
     } else {
       return ([{scale: 1}])
     }
   }
+  handleTransformBottom(swipe){
+    if (swipe && swipe.direction === "vert" && swipe.change > 0) {
+      return (
+        [
+          {scale: 1 + swipe.change/200}
+        ]
+      ) 
+     } else {
+        return ([{scale: 1}])
+    }
+  }
   likePet() {
     const url = `https://www.petfinder.com/adoption-inquiry/${this.props.pet.current_pet.pet_id}`
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
+
         Linking.openURL(url);
         this.fetchNext(); 
       } else {
@@ -64,7 +76,7 @@ class Icons extends Component {
           <Icon name="no-dogs" size={90} color="red" style={[styles.iconItem, {transform: this.handleTransformLeft(this.props.swipe)}]}/>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Icon name="refresh" size={45} color="blue" style={styles.iconItem}/>
+          <Icon name="refresh" size={45} color="blue" style={[styles.iconItem, {transform: this.handleTransformBottom(this.props.swipe)}]}/>
        </TouchableOpacity>
         <TouchableOpacity
           onPress={this.likePet}>

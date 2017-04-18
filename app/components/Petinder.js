@@ -15,7 +15,7 @@ class Petinder extends Component {
     super(); 
     this.state = { 
       display: true,
-      swipePosition: 0
+      swipePosition:{direction:'', change:0} 
     }
   }
   componentDidMount() { 

@@ -19,22 +19,20 @@ import {
 const { width, height } = Dimensions.get('window');
 const rightWidth = width/2;
 const leftWidth = 0 - rightWidth;  
-const bottom = height;  
+const bottom = height/6;  
 
 const dragDirection = ({ moveX, moveY, dx, dy}) => {
   const draggedLeft = dx < -10;
   const draggedRight = dx > 10;
-  const draggedUp = dy <-10;
-  const draggedDown = dy > 10; 
+  const draggedUp = dy < -30;
+  const draggedDown = dy > 30; 
 
-  let dragDirection = 0;
-
-  console.log(dy) 
+  let dragDirection = {direction: '', change: 0};
 
   if (draggedLeft || draggedRight) {
-    dragDirection = dx
+    dragDirection = {direction:'lat', change: dx}
   } else if (draggedUp || draggedDown){
-    dragDirection = dy
+    dragDirection = {direction: 'vert', change: dy}
   };
 
   if (dragDirection) return dragDirection;
@@ -44,7 +42,7 @@ class Pet extends Component {
   constructor(props){
     super(props);
     this.state = {
-      position: 0,
+      position: {},
       modalVisible: false
     };
     this.handleLink = this.handleLink.bind(this);
@@ -79,10 +77,10 @@ class Pet extends Component {
     })
   }
   handleTransform(pos) {
-    if (pos) {
+    if (pos && pos.direction != "vert") {
       return (
         [
-          {rotate: `${pos/6}deg`}, 
+          {rotate: `${pos.change/6}deg`}, 
           // {scale: 1 + (pos < 1? pos = (pos * -1)/200 : pos/200)}
         ]
       )
@@ -91,37 +89,55 @@ class Pet extends Component {
     }
   }
   detectCollision(position) {
-    position? position : 0;
+    position.change? position.change : 0;
     var collision;
-    if ( (position >= (rightWidth/1.2)) || (position <= (leftWidth/1.2)) ){
-      collision = true
-    } else {
-      collision = false
+    if (position.direction === "lat"){
+      if ( (position.change >= (rightWidth/1.2)) || (position.change <= (leftWidth/1.2)) ){
+        collision = true
+      } else {
+        collision = false
+      }
+    } else if (position.direction === "vert"){
+        console.log("bottom", bottom);
+      if ( position.change >= bottom ){
+        collision = true
+      } else {
+        collision = false
+      }
     }
     return collision
   }
   handleRelease(position) {
     var collision = this.detectCollision(position); 
     if (collision) {
-      if (this.state.position > 0) {
+      if (this.state.position.change > 0 && this.state.position.direction === "lat") {
         this.likePet(); 
         this.fetchNext(); 
-        this.props.updateSwipePosition(0)
-      } else {
+        this.props.updateSwipePosition({direction: '', change:0})
+      } else if (this.state.position.change < 0 && this.state.position.direction === "lat"){
         this.fetchNext(); 
-        this.props.updateSwipePosition(0)
+        this.props.updateSwipePosition({direction: '', change: 0})
+      } else if (this.state.position.change > 0 && this.state.position.direction === "vert"){
+        this.hardReload();
+        this.props.updateSwipePosition({direction: '', change:0})     
       }
     } else {
       this.setState({
-        position: 0
+        position: {direction: '', change: 0} 
       })
-      this.props.updateSwipePosition(0)
+      this.props.updateSwipePosition({direction: '', change:0})
     }
   }
   fetchNext() {
     this.props.nextPet(this.props.pet)
     this.setState({
-      position: 0
+      position: {direction: '', change: 0}
+    })
+  }
+  hardReload() {
+    this.props.fetchMyPet(0);
+    this.setState({
+      position: {direction: '', change: 0}
     })
   }
   handleLink() {
@@ -143,9 +159,23 @@ class Pet extends Component {
       }
     })
   }
+  handleLat(position) {
+    var left = 0;
+    if (position.direction === "lat"){
+      left = position.change
+    }    
+    return left;
+  }
+  handleVert(position) {
+    var top = 0;
+    if (position.direction === "vert" && position.change > 0){
+      top = position.change
+    }
+    return top;
+  }
   render(){
     return(
-      <View style={ [styles.petCard, {left: this.state.position}, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
+      <View style={ [styles.petCard, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
         <Image
           style={ styles.petImage }
           source={{uri: this.props.pet.current_pet.photo[0]}}
