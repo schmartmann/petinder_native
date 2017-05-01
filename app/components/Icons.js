@@ -19,7 +19,7 @@ class Icons extends Component {
     this.likePet = this.likePet.bind(this); 
   }
   handleTransformLeft(swipe){
-    console.log(swipe); 
+    // console.log(swipe); 
     if (swipe && swipe.direction === "lat"  && swipe.change < 0) {
       return (
         [

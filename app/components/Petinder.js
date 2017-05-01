@@ -26,7 +26,7 @@ class Petinder extends Component {
     this.checkRender(nextProps.pet.fetching); 
   }
   checkRender(fetching) {
-    console.log("check render method", fetching);
+    // console.log("check render method", fetching);
     if (fetching) {
       return(
         <Loader/>

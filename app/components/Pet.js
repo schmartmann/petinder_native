@@ -22,21 +22,24 @@ const leftWidth = 0 - rightWidth;
 const bottom = height/6;  
 
 const dragDirection = ({ moveX, moveY, dx, dy}) => {
-  const draggedLeft = dx < -10;
-  const draggedRight = dx > 10;
-  const draggedUp = dy < -30;
-  const draggedDown = dy > 30; 
-
-  let dragDirection = {direction: '', change: 0};
+  var draggedLeft = dx < -10;
+  var draggedRight = dx > 10;
+  var draggedUp = dy < -30;
+  var draggedDown = dy > 30; 
+  
+  var dragDirection = { 
+    direction: '',
+    change: undefined
+  }
 
   if (draggedLeft || draggedRight) {
-    dragDirection = {direction:'lat', change: dx}
+    dragDirection.direction = 'lat';
+    dragDirection.change = dx;
   } else if (draggedUp || draggedDown){
-    dragDirection = {direction: 'vert', change: dy}
+    dragDirection = {direction: 'vert', change: dy};
   };
 
-  console.log("dragDirection", dragDirection);
-  if (dragDirection) return dragDirection;
+ return dragDirection;
 }
 
 class Pet extends Component {
@@ -53,9 +56,8 @@ class Pet extends Component {
       onMoveShouldSetPanResponder: (evt, gestureState) => !!dragDirection(gestureState),
       onPanResponderMove: (evt, gestureState) => {
         if (!this.state.modalVisible){
-          const drag = dragDirection(gestureState);
+          var drag = dragDirection(gestureState);
           //drag returns the position change 
-          console.log('on move state', this.state.position);
           this.setState({
             position: drag
           });
@@ -63,9 +65,9 @@ class Pet extends Component {
         }
       }, 
       onPanResponderRelease: (evt, gestureState) => {
+        var drag = dragDirection(gestureState);
         if (!this.state.modalVisible){
-          console.log("handlerelease state", this.state.position); 
-          this.handleRelease(this.state.position);
+          this.handleRelease(drag);
         }
       }
     });
@@ -93,15 +95,14 @@ class Pet extends Component {
   }
   detectCollision(position) {
     var collision;
+    position.change? position.change : 0;
     if (position.direction === "lat"){
-      if ( (position.change >= (rightWidth/1.2)) || (position.change <= (leftWidth/1.2)) ){
-        console.log("collision!");
+      if ( position.change >= (rightWidth/1.2) || (position.change <= (leftWidth/1.2)) ){
         collision = true
       } else {
         collision = false
       }
     } else if (position.direction === "vert"){
-        console.log("bottom", bottom);
       if ( position.change >= bottom ){
         collision = true
       } else {
@@ -111,17 +112,17 @@ class Pet extends Component {
     return collision
   }
   handleRelease(position) {
-    console.log("handle release", position);
+    console.log("handle release pos", position)
     var collision = this.detectCollision(position); 
     if (collision) {
-      if (this.state.position.change > 0 && this.state.position.direction === "lat") {
+      if (position.change > 0 && position.direction === "lat") {
         this.likePet(); 
         this.fetchNext(); 
         this.props.updateSwipePosition({direction: '', change:0})
-      } else if (this.state.position.change < 0 && this.state.position.direction === "lat"){
+      } else if (position.change < 0 && position.direction === "lat"){
         this.fetchNext(); 
         this.props.updateSwipePosition({direction: '', change: 0})
-      } else if (this.state.position.change > 0 && this.state.position.direction === "vert"){
+      } else if (position.change > 0 && position.direction === "vert"){
         this.hardReload();
         this.props.updateSwipePosition({direction: '', change:0})     
       }
@@ -133,7 +134,6 @@ class Pet extends Component {
     }
   }
   fetchNext() {
-    console.log("next");
     this.props.nextPet(this.props.pet)
     this.setState({
       position: {direction: '', change: 0}
