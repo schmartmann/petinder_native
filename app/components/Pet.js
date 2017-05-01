@@ -112,7 +112,6 @@ class Pet extends Component {
     return collision
   }
   handleRelease(position) {
-    console.log("handle release pos", position)
     var collision = this.detectCollision(position); 
     if (collision) {
       if (position.change > 0 && position.direction === "lat") {

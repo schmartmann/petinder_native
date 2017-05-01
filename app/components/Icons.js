@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'; 
 import { connect } from 'react-redux'; 
-import { nextPet } from '../actions/index'; 
+import { fetchMyPet, nextPet } from '../actions/index'; 
 import Icon from 'react-native-vector-icons/Foundation';
 import {
   Text,
@@ -17,6 +17,7 @@ class Icons extends Component {
     super(); 
     this.fetchNext = this.fetchNext.bind(this); 
     this.likePet = this.likePet.bind(this); 
+    this.hardReload = this.hardReload.bind(this);
   }
   handleTransformLeft(swipe){
     // console.log(swipe); 
@@ -67,6 +68,9 @@ class Icons extends Component {
   fetchNext() { 
     this.props.nextPet(this.props.pet)
   }
+  hardReload() {
+    this.props.fetchMyPet(0);
+  }
   render() {
     return(
       <View style={ styles.iconBar }>
@@ -75,7 +79,9 @@ class Icons extends Component {
         >
           <Icon name="no-dogs" size={90} color="red" style={[styles.iconItem, {transform: this.handleTransformLeft(this.props.swipe)}]}/>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={this.hardReload}
+        >
           <Icon name="refresh" size={45} color="blue" style={[styles.iconItem, {transform: this.handleTransformBottom(this.props.swipe)}]}/>
        </TouchableOpacity>
         <TouchableOpacity
@@ -108,6 +114,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
+    fetchMyPet: fetchMyPet,
     nextPet: nextPet
   }, dispatch)
 }
