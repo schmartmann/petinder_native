@@ -188,9 +188,21 @@ class Pet extends Component {
       return 1 
     }
   } 
+  loader(fetchStatus){
+    if (fetchStatus) {
+      return (
+        <Text style={styles.loader}>
+          Loading!
+        </Text>
+      )
+    } else {
+      return (<Text/>)
+    }
+  }
   render(){
     return(
-      <View style={ [styles.petCard, {opacity: this.checkRender(this.props.fetchStatus)}, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
+      <View style={ [styles.petCard, {opacity: this.checkRender(this.props.fetchStatus)}, {zIndex: this.props.fetchStatus? -1 : 1 }, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
+        {this.loader(this.props.fetchStatus)}
         <Image
           style={ styles.petImage }
           source={{uri: this.props.pet.current_pet.photo[0]}}
@@ -332,6 +344,19 @@ const styles = StyleSheet.create({
   profileButton: {
     marginTop: "15%", 
     textAlign: "center",
+  },
+  loader: {
+    zIndex: 1,
+    color: "black",
+    textShadowColor: "white", 
+    textShadowOffset: {'width': 2, 'height': 2},
+    backgroundColor: "transparent", 
+    fontSize: 30,
+    textAlign: "center",
+    textAlignVertical: "center",
+    position: "absolute", 
+    top: "30%",
+    left: "30%",
   }
 })
 
