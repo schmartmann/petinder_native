@@ -35,6 +35,7 @@
 		2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3E991DF850E9000B6D8A /* libRCTWebSocket-tvOS.a */; };
 		2D02E4C91E0B4AEC006451C7 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* PetinderNativeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PetinderNativeTests.m */; };
+		44B55A921EB8F5B9003B2221 /* PetinderNativeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PetinderNativeTests.m */; };
 		44BF84831EA32C970013FD00 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44BF84791EA32C970013FD00 /* Entypo.ttf */; };
 		44BF84841EA32C970013FD00 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44BF84791EA32C970013FD00 /* Entypo.ttf */; };
 		44BF84851EA32C970013FD00 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44BF84791EA32C970013FD00 /* Entypo.ttf */; };
@@ -1091,6 +1092,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				44B55A921EB8F5B9003B2221 /* PetinderNativeTests.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

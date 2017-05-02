@@ -181,6 +181,13 @@ class Pet extends Component {
     }
     return top;
   }
+  formatPetName(name){
+    if (name.length > 15){
+      return name = name.slice(0, 15).toUpperCase().concat("...");
+    } else {
+      return name.toUpperCase();
+    };
+  }
   checkRender(fetching) {
     if (fetching) {
       return 0.5
@@ -208,7 +215,8 @@ class Pet extends Component {
           source={{uri: this.props.pet.current_pet.photo[0]}}
           />
         <Text style={ styles.petName } adjustsFontSizeToFit={true}>
-            { this.props.pet.current_pet.name.toUpperCase() }
+          { this.formatPetName(this.props.pet.current_pet.name) }
+            {/* { this.props.pet.current_pet.name.toUpperCase() } */}
         </Text>
         <Text style={ styles.petLocation } adjustsFontSizeToFit={true}>
           { `${this.props.pet.current_pet.city.toUpperCase() }${this.props.pet.current_pet.city? ',' : ''} ${ this.props.pet.current_pet.state.toUpperCase() }`}
