@@ -181,9 +181,16 @@ class Pet extends Component {
     }
     return top;
   }
+  checkRender(fetching) {
+    if (fetching) {
+      return 0.5
+    } else {
+      return 1 
+    }
+  } 
   render(){
     return(
-      <View style={ [styles.petCard, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
+      <View style={ [styles.petCard, {opacity: this.checkRender(this.props.fetchStatus)}, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
         <Image
           style={ styles.petImage }
           source={{uri: this.props.pet.current_pet.photo[0]}}

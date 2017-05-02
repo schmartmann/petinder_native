@@ -20,23 +20,20 @@ class Petinder extends Component {
     }
   }
   componentDidMount() { 
-    this.checkRender(this.props.pet.fetching);
+    this.checkFetch(this.props.pet.fetching);
   }
   componentWillReceiveProps(nextProps) {
-    this.checkRender(nextProps.pet.fetching); 
+    this.checkFetch(nextProps.pet.fetching); 
   }
-  checkRender(fetching) {
-    // console.log("check render method", fetching);
+  checkFetch(fetching) {
     if (fetching) {
-      return(
-        <Loader/>
-      )
+      this.setState({
+        fetching: true
+      }) 
     } else {
-      return(
-        <Pet 
-          updateSwipePosition={this.updateSwipePosition.bind(this)}
-        />
-      )
+      this.setState({
+        fetching: false
+      })
     }
   }
   updateSwipePosition(position){
@@ -46,9 +43,12 @@ class Petinder extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1}}> 
         <Navbar/>
-        { this.checkRender() }
+        <Pet
+          fetchStatus={this.state.fetching}
+          updateSwipePosition={this.updateSwipePosition.bind(this)}
+        />
         <Icons swipe={this.state.swipePosition}/>
       </View>
     );
