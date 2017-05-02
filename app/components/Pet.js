@@ -26,16 +26,20 @@ const dragDirection = ({ moveX, moveY, dx, dy}) => {
   var draggedRight = dx > 10;
   var draggedUp = dy < -30;
   var draggedDown = dy > 30; 
-  
+
   var dragDirection = { 
     direction: '',
     change: undefined
   }
 
   if (draggedLeft || draggedRight) {
+    draggedDown = false;
+    draggedUp = false;
     dragDirection.direction = 'lat';
     dragDirection.change = dx;
   } else if (draggedUp || draggedDown){
+    draggedLeft = false;
+    draggedRight = false;
     dragDirection = {direction: 'vert', change: dy};
   };
 
