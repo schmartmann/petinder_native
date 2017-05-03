@@ -208,7 +208,7 @@ class Pet extends Component {
   }
   render(){
     return(
-      <View style={ [styles.petCard, {opacity: this.checkRender(this.props.fetchStatus)}, {zIndex: this.props.fetchStatus? -1 : 1 }, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
+      <View style={ [styles.petCard, {opacity: this.checkRender(this.props.fetchStatus)}, {zIndex: this.props.fetchStatus? -1 : 0 }, {top: this.handleVert(this.state.position)}, {left: this.handleLat(this.state.position) }, {transform: this.handleTransform(this.state.position)}] } {...this._panResponder.panHandlers}>
         {this.loader(this.props.fetchStatus)}
         <Image
           style={ styles.petImage }
@@ -267,6 +267,7 @@ class Pet extends Component {
 
 const styles = StyleSheet.create({
    petCard: {
+    backgroundColor: "white", 
     position: 'relative',
     marginTop: 100,
     marginLeft: '5%',
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: 'lightgrey',
     borderWidth: 1,
-    borderRadius: 15 ,
+    borderRadius: 18,
     shadowColor: 'darkslategrey', 
     shadowOpacity: 1,
     shadowOffset: {'width': 2, 'height': 2}

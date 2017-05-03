@@ -46,7 +46,7 @@ class Icons extends Component {
     if (swipe && swipe.direction === "vert" && swipe.change > 0) {
       return (
         [
-          {scale: 1 + swipe.change/200}
+          {scale: 1 + swipe.change/100}
         ]
       ) 
      } else {
